@@ -461,9 +461,11 @@ class App < Sinatra::Base
       ids << estate[:id]
     end
 
-    cond = conds.join(' OR ')
-    sql = "SELECT * FROM estate WHERE #{cond}"
-    estates_in_polygon = db.xquery(sql, *ids).to_a.compact
+    unless conds.empty?
+      cond = conds.join(' OR ')
+      sql = "SELECT * FROM estate WHERE #{cond}"
+      estates_in_polygon = db.xquery(sql, *ids).to_a.compact
+    end
 
     nazotte_estates = estates_in_polygon.take(NAZOTTE_LIMIT)
     {
