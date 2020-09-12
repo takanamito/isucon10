@@ -38,3 +38,9 @@ CREATE TABLE isuumo.chair
     popularity  INTEGER         NOT NULL,
     stock       INTEGER         NOT NULL
 );
+
+CREATE INDEX estate_rent_index ON estate (rent);
+CREATE INDEX chair_stock_price_id_index ON chair (stock, price, id);
+CREATE INDEX estate_popularity_id_index ON estate (popularity DESC, id);
+CREATE INDEX chair_price_stock_index ON chair (price, stock);
+CREATE INDEX chair_stock_popularity_id ON chair (stock, popularity DESC, id);
