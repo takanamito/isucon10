@@ -20,6 +20,8 @@ CREATE TABLE isuumo.estate
     popularity  INTEGER             NOT NULL
 );
 
+CREATE INDEX rent_index ON estate (rent);
+
 CREATE TABLE isuumo.chair
 (
     id          INTEGER         NOT NULL PRIMARY KEY,
