@@ -423,7 +423,7 @@ class App < Sinatra::Base
     # count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     estates = db.xquery("#{sqlprefix}#{search_condition}", query_params).to_a
 
-    { count: estates.size, estates: estates.slice(per_page * (page - 1), per_page).map { |e| camelize_keys_for_estate(e) } }.to_json
+    { count: estates.size, estates: estates.slice(per_page * page, per_page).map { |e| camelize_keys_for_estate(e) } }.to_json
   end
 
   post '/api/estate/nazotte' do
