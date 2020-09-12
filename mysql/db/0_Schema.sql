@@ -16,10 +16,9 @@ CREATE TABLE isuumo.estate
     rent        INTEGER             NOT NULL,
     door_height INTEGER             NOT NULL,
     door_width  INTEGER             NOT NULL,
-    features    VARCHAR(64)         NOT NULL,
     popularity  INTEGER             NOT NULL,
     rev_popularity INTEGER as (999999 - popularity),
-    FULLTEXT(features)
+    FULLTEXT(features) WITH PARSER NGRAM
 );
 
 CREATE TABLE isuumo.chair
@@ -33,12 +32,11 @@ CREATE TABLE isuumo.chair
     width       INTEGER         NOT NULL,
     depth       INTEGER         NOT NULL,
     color       VARCHAR(64)     NOT NULL,
-    features    VARCHAR(64)     NOT NULL,
     kind        VARCHAR(64)     NOT NULL,
     popularity  INTEGER         NOT NULL,
     stock       INTEGER         NOT NULL,
     rev_popularity INTEGER as (999999 - popularity),
-    FULLTEXT(features)
+    FULLTEXT(features) WITH PARSER NGRAM
 );
 
 CREATE INDEX rent_index ON estate (rent);
