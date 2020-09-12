@@ -303,12 +303,13 @@ class App < Sinatra::Base
       end
 
     transaction('post_api_chair_buy') do |tx_name|
-      chair = db.xquery('SELECT * FROM chair WHERE id = ? AND stock > 0 FOR UPDATE', id).first
-      unless chair
+      chair = db.xquery('SELECT * FROM chair WHERE id = ? FOR UPDATE', id).first
+      if !chair || chair[:stock] == 0
         rollback_transaction(tx_name) if in_transaction?(tx_name)
         halt 404
       end
-      db.xquery('UPDATE chair SET stock = stock - 1 WHERE id = ?', id)
+      stock = chair[:stock] - 1
+      db.xquery('UPDATE chair SET stock = ? WHERE id = ?', stock, id)
     end
 
     status 200
