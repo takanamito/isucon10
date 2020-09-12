@@ -500,11 +500,14 @@ class App < Sinatra::Base
       halt 400
     end
 
+    estates = []
     transaction('post_api_estate') do
       CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
-        sql = 'INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-        db.xquery(sql, *row.map(&:to_s))
+        estate = *row.map { |data| "'#{data}'"}
+        estates << "(#{estate.join(',')})"
       end
+      sql = "INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES #{estates.join(',')}"
+      db.query(sql)
     end
 
     status 201
