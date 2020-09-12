@@ -453,9 +453,9 @@ class App < Sinatra::Base
     estates_in_polygon = []
     # conds = []
     # ids = []
+    # coordinates_to_text = "'POLYGON((%s))'" % coordinates.map { |c| '%f %f' % c.values_at(:latitude, :longitude) }.join(',')
     #
     # estates.each do |estate|
-    #   coordinates_to_text = "'POLYGON((%s))'" % coordinates.map { |c| '%f %f' % c.values_at(:latitude, :longitude) }.join(',')
     #   point = "'POINT(%f %f)'" % estate.values_at(:latitude, :longitude)
     #   conds << "(id = ? AND ST_Contains(ST_PolygonFromText(%s), ST_GeomFromText(%s)))" % [coordinates_to_text, point]
     #   ids << estate[:id]
@@ -475,6 +475,7 @@ class App < Sinatra::Base
       if e
         estates_in_polygon << e
       end
+      break if estates_in_polygon.size == NAZOTTE_LIMIT
     end
 
     nazotte_estates = estates_in_polygon.take(NAZOTTE_LIMIT)
