@@ -451,15 +451,19 @@ class App < Sinatra::Base
     estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude])
 
     estates_in_polygon = []
+    conds = []
+    ids = []
+    coordinates_to_text = "'POLYGON((%s))'" % coordinates.map { |c| '%f %f' % c.values_at(:latitude, :longitude) }.join(',')
+
     estates.each do |estate|
       point = "'POINT(%f %f)'" % estate.values_at(:latitude, :longitude)
-      coordinates_to_text = "'POLYGON((%s))'" % coordinates.map { |c| '%f %f' % c.values_at(:latitude, :longitude) }.join(',')
-      sql = 'SELECT * FROM estate WHERE id = ? AND ST_Contains(ST_PolygonFromText(%s), ST_GeomFromText(%s))' % [coordinates_to_text, point]
-      e = db.xquery(sql, estate[:id]).first
-      if e
-        estates_in_polygon << e
-      end
+      conds << "(id = ? AND ST_Contains(ST_PolygonFromText(%s), ST_GeomFromText(%s)))" % [coordinates_to_text, point]
+      ids << estate[:id]
     end
+
+    cond = conds.join(' OR ')
+    sql = "SELECT * FROM estate WHERE #{cond}"
+    estates_in_polygon = db.xquery(sql, *ids).compact
 
     nazotte_estates = estates_in_polygon.take(NAZOTTE_LIMIT)
     {
