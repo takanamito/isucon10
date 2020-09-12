@@ -21,6 +21,7 @@ CREATE TABLE isuumo.estate
 );
 
 CREATE INDEX rent_index ON estate (rent);
+CREATE INDEX stock_price_index ON chair (stock,price,id)
 
 CREATE TABLE isuumo.chair
 (
