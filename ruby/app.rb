@@ -209,7 +209,7 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      features = params[:features].split(',').join(' ')
+      features = params[:features].split(',').map { |f| "+#{f}" }.join(' ')
       search_queries << "MATCH (features) AGAINST ('#{features}' IN BOOLEAN MODE)"
     end
 
@@ -386,7 +386,7 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      features = params[:features].split(',').join(' ')
+      features = params[:features].split(',').map { |f| "+#{f}" }.join(' ')
       search_queries << "MATCH (features) AGAINST ('#{features}' IN BOOLEAN MODE)"
     end
 
