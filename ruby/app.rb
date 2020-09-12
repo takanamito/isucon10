@@ -278,11 +278,14 @@ class App < Sinatra::Base
       halt 400
     end
 
+    chairs = []
     transaction('post_api_chair') do
       CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
-        sql = 'INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)'
-        db.xquery(sql, *row.map(&:to_s))
+        chair = *row.map { |data| "'#{data}'"}
+        chairs << "(#{chair.join(',')})"
       end
+      sql = "INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES #{chairs.join(",")}"
+      db.query(sql)
     end
 
     status 201
