@@ -53,3 +53,5 @@ CREATE INDEX chair_stock ON chair (stock);
 CREATE INDEX chair_popularity_id_height_stock ON chair (popularity, id, height, stock);
 CREATE INDEX chair_kind_stock ON chair (kind,stock);
 CREATE INDEX chair_door_width ON estate (door_width);
+
+CREATE INDEX estate_latitude_longitude ON estate (latitude, longitude);

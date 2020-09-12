@@ -452,9 +452,9 @@ class App < Sinatra::Base
       },
     }
 
-    sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ? ORDER BY rev_popularity ASC, id ASC'
+    sql = 'SELECT * FROM estate WHERE latitude <= ? AND latitude >= ? AND longitude <= ? AND longitude >= ?'
     estates = db.xquery(sql, bounding_box[:bottom_right][:latitude], bounding_box[:top_left][:latitude], bounding_box[:bottom_right][:longitude], bounding_box[:top_left][:longitude])
-
+    estates = estates.sort_by { |estate| [estate[:rev_popularity], estate[:id] ]}
     estates_in_polygon = []
     # conds = []
     # ids = []
