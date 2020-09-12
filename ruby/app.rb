@@ -240,14 +240,13 @@ class App < Sinatra::Base
 
     sqlprefix = 'SELECT * FROM chair WHERE '
     search_condition = search_queries.join(' AND ')
-    limit_offset = " ORDER BY rev_popularity ASC, id ASC" # XXX: mysql-cs-bind doesn't support escaping variables for limit and offset
+    limit_offset = " ORDER BY rev_popularity ASC, id ASC LIMIT #{per_page} OFFSET #{per_page * page}" # XXX: mysql-cs-bind doesn't support escaping variables for limit and offset
     count_prefix = 'SELECT COUNT(*) as count FROM chair WHERE '
 
-    # count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
+    count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     chairs = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params).to_a
-    chairs = chairs.slice(per_page * page, per_page) || []
 
-    { count: chairs.size, chairs: chairs }.to_json
+    { count: count, chairs: chairs }.to_json
   end
 
   get '/api/chair/:id' do
@@ -418,14 +417,13 @@ class App < Sinatra::Base
 
     sqlprefix = 'SELECT * FROM estate WHERE '
     search_condition = search_queries.join(' AND ')
-    limit_offset = " ORDER BY rev_popularity ASC, id ASC" # XXX:
+    limit_offset = " ORDER BY rev_popularity ASC, id ASC LIMIT #{per_page} OFFSET #{per_page * page}" # XXX:
     count_prefix = 'SELECT COUNT(*) as count FROM estate WHERE '
 
-    # count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
+    count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     estates = db.xquery("#{sqlprefix}#{search_condition}#{limit_offset}", query_params).to_a
-    estates = estates.slice(per_page * page, per_page) || []
 
-    { count: estates.size, estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
+    { count: count, estates: estates.map { |e| camelize_keys_for_estate(e) } }.to_json
   end
 
   post '/api/estate/nazotte' do
