@@ -278,12 +278,13 @@ class App < Sinatra::Base
       halt 400
     end
 
+    CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
+      chair = *row.map { |data| "'#{data}'"}
+      chairs << "(#{chair.join(',')})"
+    end
+
     chairs = []
     transaction('post_api_chair') do
-      CSV.parse(params[:chairs][:tempfile].read, skip_blanks: true) do |row|
-        chair = *row.map { |data| "'#{data}'"}
-        chairs << "(#{chair.join(',')})"
-      end
       sql = "INSERT INTO chair(id, name, description, thumbnail, price, height, width, depth, color, features, kind, popularity, stock) VALUES #{chairs.join(",")}"
       db.query(sql)
     end
@@ -513,12 +514,13 @@ class App < Sinatra::Base
       halt 400
     end
 
+    CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
+      estate = *row.map { |data| "'#{data}'"}
+      estates << "(#{estate.join(',')})"
+    end
+
     estates = []
     transaction('post_api_estate') do
-      CSV.parse(params[:estates][:tempfile].read, skip_blanks: true) do |row|
-        estate = *row.map { |data| "'#{data}'"}
-        estates << "(#{estate.join(',')})"
-      end
       sql = "INSERT INTO estate(id, name, description, thumbnail, address, latitude, longitude, rent, door_height, door_width, features, popularity) VALUES #{estates.join(',')}"
       db.query(sql)
     end
