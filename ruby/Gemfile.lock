@@ -2,8 +2,11 @@ GEM
   remote: https://rubygems.org/
   specs:
     backports (3.18.2)
+    faraday (1.0.1)
+      multipart-post (>= 1.2, < 3)
     kgio (2.11.3)
     multi_json (1.15.0)
+    multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     mysql2 (0.5.3)
@@ -14,6 +17,8 @@ GEM
       rack
     raindrops (0.19.1)
     ruby2_keywords (0.0.2)
+    sentry-raven (3.0.4)
+      faraday (>= 1.0)
     sinatra (2.0.8.1)
       mustermann (~> 1.0)
       rack (~> 2.0)
@@ -38,10 +43,11 @@ PLATFORMS
 DEPENDENCIES
   mysql2
   mysql2-cs-bind
+  sentry-raven
   sinatra
   sinatra-contrib
   stackprof
   unicorn
 
 BUNDLED WITH
-   2.1.2
+   2.1.4
