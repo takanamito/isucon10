@@ -209,10 +209,8 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
-      end
+      features = params[:features].split(',').join(' ')
+      search_queries << "MATCH (features) AGAINST ('#{features}' IN BOOLEAN MODE)"
     end
 
     if search_queries.size == 0
@@ -388,10 +386,8 @@ class App < Sinatra::Base
     end
 
     if params[:features] && params[:features].size > 0
-      params[:features].split(',').each do |feature_condition|
-        search_queries << "features LIKE CONCAT('%', ?, '%')"
-        query_params.push(feature_condition)
-      end
+      features = params[:features].split(',').join(' ')
+      search_queries << "MATCH (features) AGAINST ('#{features}' IN BOOLEAN MODE)"
     end
 
     if search_queries.size == 0
