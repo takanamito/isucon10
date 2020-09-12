@@ -9,3 +9,5 @@ gem "mysql2-cs-bind"
 gem "unicorn"
 gem 'stackprof'
 gem 'sentry-raven'
+gem 'newrelic_rpm'
+gem 'newrelic-infinite_tracing'
