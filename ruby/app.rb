@@ -245,8 +245,9 @@ class App < Sinatra::Base
 
     # count = db.xquery("#{count_prefix}#{search_condition}", query_params).first[:count]
     chairs = db.xquery("#{sqlprefix}#{search_condition}", query_params).to_a
+    chairs = chairs.slice(per_page * page, per_page) || []
 
-    { count: chairs.size, chairs: chairs.slice(per_page * page, per_page) || [] }.to_json
+    { count: chairs.size, chairs: chairs }.to_json
   end
 
   get '/api/chair/:id' do
